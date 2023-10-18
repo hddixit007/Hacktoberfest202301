@@ -1,0 +1,74 @@
+#include <iostream>
+#include <queue>
+
+class StackUsingQueues {
+private:
+    std::queue<int> queue1; // Main queue
+    std::queue<int> queue2; // Temporary queue
+
+public:
+    // Push an element onto the stack.
+    void push(int value) {
+        // Add the new element to the temporary queue.
+        queue2.push(value);
+
+        // Move all elements from the main queue to the temporary queue.
+        while (!queue1.empty()) {
+            queue2.push(queue1.front());
+            queue1.pop();
+        }
+
+        // Swap the main and temporary queues to make the temporary queue the new main queue.
+        std::swap(queue1, queue2);
+    }
+
+    // Removes the element on the top of the stack and returns it.
+    int pop() {
+        if (empty()) {
+            std::cerr << "Stack is empty." << std::endl;
+            return -1; // Or throw an exception.
+        }
+
+        int topElement = queue1.front();
+        queue1.pop();
+        return topElement;
+    }
+
+    // Returns the element on the top of the stack without removing it.
+    int top() {
+        if (empty()) {
+            std::cerr << "Stack is empty." << std::endl;
+            return -1; // Or throw an exception.
+        }
+
+        return queue1.front();
+    }
+
+    // Check if the stack is empty.
+    bool empty() {
+        return queue1.empty();
+    }
+};
+
+int main() {
+    StackUsingQueues stack;
+
+    stack.push(10);
+    stack.push(20);
+    stack.push(30);
+    stack.push(40);
+    stack.push(50);
+
+    std::cout << "Top: " << stack.top() << std::endl; // Output: 3
+
+    stack.pop();
+    std::cout << "Top: " << stack.top() << std::endl; // Output: 2
+
+    stack.pop();
+    stack.pop();
+    std::cout << "Top: " << stack.top() << std::endl;
+    
+    std::cout << "Is stack empty? " << (stack.empty() ? "Yes" : "No") << std::endl; // Output: Yes
+
+    return 0;
+}
